@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos Cercanos</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #ffe7b5;
+        }
+
+        .navbar {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .navbar-brand, .navbar-nav .nav-link {
+            color: white !important;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .evento-imagen {
+            border-radius: 15px 15px 0 0;
+        }
+
+        #map {
+            height: 400px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            border-radius: 50px;
+        }
+
+        .app-container {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        footer {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .dark-mode {
+            background-color: #121212;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="#">Eventos App</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+    </nav>
+
+    <!-- Contenedor principal -->
+    <div class="app-container">
+        <!-- Loader -->
+        <div id="loader" class="text-center" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Cargando...</span>
+            </div>
+        </div>
+
+        <!-- Card para los eventos -->
+        <div class="card" style="display: none;" id="evento-card">
+            <img id="imagen-evento" class="evento-imagen card-img-top" src="" alt="Imagen del evento">
+            <img id="imagen-evento-adicional" class="evento-imagen card-img-bottom" src="" alt="Imagen adicional del evento">
+            <div class="card-body text-center">
+                <h3 id="titulo-evento" class="card-title"></h3>
+                <p id="descripcion-evento" class="card-text"></p>
+            </div>
+        </div>
+
+        <!-- Botones para cambiar eventos -->
+        <div class="d-flex justify-content-around mt-4">
+            <button class="btn btn-primary" onclick="cambiarEvento(1)"><i class="fas fa-calendar-alt"></i> Evento 1</button>
+            <button class="btn btn-secondary" onclick="cambiarEvento(2)"><i class="fas fa-calendar-day"></i> Evento 2</button>
+            <button class="btn btn-success" onclick="cambiarEvento(3)"><i class="fas fa-music"></i> Evento 3</button>
+        </div>
+
+        <!-- Mapa para mostrar la ubicación -->
+        <div id="map" style="display: none;"></div>
+    </div>
+
+    <!-- Pie de Página -->
+    <footer>
+        <p>&copy; 2024 Eventos App. Todos los derechos reservados.</p>
+        <a href="#">Términos</a> | <a href="#">Política de privacidad</a>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let map;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 25.438, lng: -100.973 },
+                zoom: 12,
+            });
+        }
+
+        function cambiarEvento(evento) {
+            const card = document.getElementById('evento-card');
+            const loader = document.getElementById('loader');
+            const mapDiv = document.getElementById('map');
+
+            card.style.display = 'none';
+            mapDiv.style.display = 'none';
+            loader.style.display = 'block';
+
+            setTimeout(() => {
+                loader.style.display = 'none';
+                card.style.display = 'block';
+                mapDiv.style.display = 'block';
+
+                // Información de cada evento
+                let imagenEvento = document.getElementById('imagen-evento');
+                let imagenEventoAdicional = document.getElementById('imagen-evento-adicional');
+                let titulo = document.getElementById('titulo-evento');
+                let descripcion = document.getElementById('descripcion-evento');
+                let ubicacionEvento;
+
+                if (evento === 1) {
+                    imagenEvento.src = 'https://saltillo.city/wp-content/uploads/2024/11/Presentacion-del-Libro-Profeta-en-su-Tierra-scaled.jpg';
+                    imagenEventoAdicional.src = 'https://lh3.googleusercontent.com/p/AF1QipNjOS0CB_zSJZTSMDJwxeeWlGZ_NmYJBErNN21Q=s680-w680-h510';
+                    titulo.textContent = 'Evento 1: Presentación de Libro';
+                    descripcion.textContent = 'Detalles del Evento: Biblioteca ‘José García Rodríguez’, 29 de Noviembre.';
+                    ubicacionEvento = { lat: 25.438, lng: -100.973 };
+                } else if (evento === 2) {
+                    imagenEvento.src = 'https://saltillo.city/wp-content/uploads/2024/11/Taller-de-Expresion-Corporal-scaled.jpg';
+                    imagenEventoAdicional.src = 'https://mexicotravelchannel.com.mx/wp-content/uploads/2020/10/casa-purcel_mexico-travel-channel_1200x680.jpg';
+                    titulo.textContent = 'Evento 2: Taller de Expresión';
+                    descripcion.textContent = 'Detalles del Evento: Sábado 9, 16 y 30 de Noviembre, Centro Cultural Casa Purcell.';
+                    ubicacionEvento = { lat: 25.450, lng: -100.960 };
+                } else if (evento === 3) {
+                    imagenEvento.src = 'https://saltillo.city/wp-content/uploads/2024/11/Stephen-Costello-Kristine-Opolais-en-Concierto--scaled.jpg';
+                    imagenEventoAdicional.src = 'https://upload.wikimedia.org/wikipedia/commons/1/1a/Teatro_de_la_Ciudad_Fernando_Soler.jpg';
+                    titulo.textContent = 'Evento 3: Concierto Ópera';
+                    descripcion.textContent = 'Detalles del Evento: Teatro de la Ciudad Fernando Soler.';
+                    ubicacionEvento = { lat: 25.434, lng: -100.967 };
+                }
+
+                // Centrar mapa en la ubicación
+                map.setCenter(ubicacionEvento);
+                map.setZoom(15);
+            }, 1500);
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY&callback=initMap" async defer></script>
+</body>
+</html>
