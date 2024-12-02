@@ -6,6 +6,7 @@
     <title>Eventos Cercanos</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="manifest" href="/manifest.json">
     <style>
         body {
             background-color: #ffe7b5;
@@ -170,5 +171,13 @@
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY&callback=initMap" async defer></script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker
+                .register("/sw.js")
+                .then(() => console.log("Service Worker registrado"))
+                .catch(err => console.error("Error al registrar el Service Worker", err));
+        }
+    </script>    
 </body>
 </html>
