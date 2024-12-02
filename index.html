@@ -26,16 +26,8 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .evento-imagen {
-            border-radius: 15px 15px 0 0;
-        }
-
-        iframe {
+        .evento-imagen, .ubicacion-imagen {
             border-radius: 15px;
-            margin-top: 20px;
-            width: 100%;
-            height: 450px;
-            border: none;
         }
 
         .btn {
@@ -86,16 +78,16 @@
             </div>
         </div>
 
+        <!-- Imagen de la ubicación -->
+        <div id="ubicacion-container" style="display: none;">
+            <img id="imagen-ubicacion" class="ubicacion-imagen card-img-top" src="" alt="Ubicación del evento">
+        </div>
+
         <!-- Botones para cambiar eventos -->
         <div class="d-flex justify-content-around mt-4">
             <button class="btn btn-primary" onclick="cambiarEvento(1)"><i class="fas fa-calendar-alt"></i> Evento 1</button>
             <button class="btn btn-secondary" onclick="cambiarEvento(2)"><i class="fas fa-calendar-day"></i> Evento 2</button>
             <button class="btn btn-success" onclick="cambiarEvento(3)"><i class="fas fa-music"></i> Evento 3</button>
-        </div>
-
-        <!-- Mapa para mostrar la ubicación -->
-        <div id="map-container" style="display: none;">
-            <iframe id="map-iframe"></iframe>
         </div>
     </div>
 
@@ -112,41 +104,38 @@
         function cambiarEvento(evento) {
             const card = document.getElementById('evento-card');
             const loader = document.getElementById('loader');
-            const mapContainer = document.getElementById('map-container');
-            const mapIframe = document.getElementById('map-iframe');
+            const ubicacionContainer = document.getElementById('ubicacion-container');
+            const imagenUbicacion = document.getElementById('imagen-ubicacion');
 
             card.style.display = 'none';
-            mapContainer.style.display = 'none';
+            ubicacionContainer.style.display = 'none';
             loader.style.display = 'block';
 
             setTimeout(() => {
                 loader.style.display = 'none';
                 card.style.display = 'block';
-                mapContainer.style.display = 'block';
+                ubicacionContainer.style.display = 'block';
 
                 let imagenEvento = document.getElementById('imagen-evento');
                 let titulo = document.getElementById('titulo-evento');
                 let descripcion = document.getElementById('descripcion-evento');
-                let iframeSrc;
 
                 if (evento === 1) {
                     imagenEvento.src = 'https://saltillo.city/wp-content/uploads/2024/11/Presentacion-del-Libro-Profeta-en-su-Tierra-scaled.jpg';
                     titulo.textContent = 'Evento 1: Presentación de Libro';
                     descripcion.textContent = 'Detalles del Evento: Biblioteca ‘José García Rodríguez’, 29 de Noviembre.';
-                    iframeSrc = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3602.9314591993298!2d-100.99423792406436!3d25.44055492179978!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86886d57875bbf29%3A0x57722f789181b7c7!2sEscuela%20de%20Bachilleres%20Ateneo%20Fuente!5e0!3m2!1ses-419!2smx!4v1733115343546!5m2!1ses-419!2smx";
+                    imagenUbicacion.src = 'https://raw.githubusercontent.com/Sams926/app/refs/heads/main/Captura%20de%20pantalla%202024-12-01%20231235.png';
                 } else if (evento === 2) {
                     imagenEvento.src = 'https://saltillo.city/wp-content/uploads/2024/11/Taller-de-Expresion-Corporal-scaled.jpg';
                     titulo.textContent = 'Evento 2: Taller de Expresión';
                     descripcion.textContent = 'Detalles del Evento: Centro Cultural Casa Purcell.';
-                    iframeSrc = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2548.0468123117494!2d-101.00078131584614!3d25.42213232111341!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x868872bc50de17c9%3A0x1a3696014624497!2sCentro%20Cultural%20Casa%20Purcell!5e0!3m2!1ses-419!2smx!4v1733115248527!5m2!1ses-419!2smx";
+                    imagenUbicacion.src = 'https://raw.githubusercontent.com/Sams926/app/refs/heads/main/Captura%20de%20pantalla%202024-12-01%20231314.png';
                 } else if (evento === 3) {
                     imagenEvento.src = 'https://saltillo.city/wp-content/uploads/2024/11/Stephen-Costello-Kristine-Opolais-en-Concierto--scaled.jpg';
                     titulo.textContent = 'Evento 3: Concierto Ópera';
                     descripcion.textContent = 'Detalles del Evento: Teatro de la Ciudad Fernando Soler.';
-                    iframeSrc = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3603.13997229714!2d-101.00216652406448!3d25.433583522084554!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x868872a10e93482b%3A0x3faa7cacfb2c33df!2sTeatro%20de%20la%20Ciudad%20Fernando%20Soler!5e0!3m2!1ses-419!2smx!4v1733115370238!5m2!1ses-419!2smx";
+                    imagenUbicacion.src = 'https://raw.githubusercontent.com/Sams926/app/refs/heads/main/Captura%20de%20pantalla%202024-12-01%20231558.png';
                 }
-
-                mapIframe.src = iframeSrc;
             }, 1500);
         }
     </script>
