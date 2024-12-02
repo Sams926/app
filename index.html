@@ -26,8 +26,14 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .evento-imagen, .ubicacion-imagen {
+        .evento-imagen {
+            border-radius: 15px 15px 0 0;
+        }
+
+        #map {
+            height: 400px;
             border-radius: 15px;
+            margin-top: 20px;
         }
 
         .btn {
@@ -52,12 +58,19 @@
             color: white;
             text-decoration: underline;
         }
+
+        .dark-mode {
+            background-color: #121212;
+            color: white;
+        }
     </style>
 </head>
 <body>
     <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-lg">
         <a class="navbar-brand" href="#">Eventos App</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
     </nav>
 
     <!-- Contenedor principal -->
@@ -72,15 +85,11 @@
         <!-- Card para los eventos -->
         <div class="card" style="display: none;" id="evento-card">
             <img id="imagen-evento" class="evento-imagen card-img-top" src="" alt="Imagen del evento">
+            <img id="imagen-evento-adicional" class="evento-imagen card-img-bottom" src="" alt="Imagen adicional del evento">
             <div class="card-body text-center">
                 <h3 id="titulo-evento" class="card-title"></h3>
                 <p id="descripcion-evento" class="card-text"></p>
             </div>
-        </div>
-
-        <!-- Imagen de la ubicación -->
-        <div id="ubicacion-container" style="display: none;">
-            <img id="imagen-ubicacion" class="ubicacion-imagen card-img-top" src="" alt="Ubicación del evento">
         </div>
 
         <!-- Botones para cambiar eventos -->
@@ -89,6 +98,9 @@
             <button class="btn btn-secondary" onclick="cambiarEvento(2)"><i class="fas fa-calendar-day"></i> Evento 2</button>
             <button class="btn btn-success" onclick="cambiarEvento(3)"><i class="fas fa-music"></i> Evento 3</button>
         </div>
+
+        <!-- Mapa para mostrar la ubicación -->
+        <div id="map" style="display: none;"></div>
     </div>
 
     <!-- Pie de Página -->
@@ -101,43 +113,62 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        let map;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 25.438, lng: -100.973 },
+                zoom: 12,
+            });
+        }
+
         function cambiarEvento(evento) {
             const card = document.getElementById('evento-card');
             const loader = document.getElementById('loader');
-            const ubicacionContainer = document.getElementById('ubicacion-container');
-            const imagenUbicacion = document.getElementById('imagen-ubicacion');
+            const mapDiv = document.getElementById('map');
 
             card.style.display = 'none';
-            ubicacionContainer.style.display = 'none';
+            mapDiv.style.display = 'none';
             loader.style.display = 'block';
 
             setTimeout(() => {
                 loader.style.display = 'none';
                 card.style.display = 'block';
-                ubicacionContainer.style.display = 'block';
+                mapDiv.style.display = 'block';
 
+                // Información de cada evento
                 let imagenEvento = document.getElementById('imagen-evento');
+                let imagenEventoAdicional = document.getElementById('imagen-evento-adicional');
                 let titulo = document.getElementById('titulo-evento');
                 let descripcion = document.getElementById('descripcion-evento');
+                let ubicacionEvento;
 
                 if (evento === 1) {
                     imagenEvento.src = 'https://saltillo.city/wp-content/uploads/2024/11/Presentacion-del-Libro-Profeta-en-su-Tierra-scaled.jpg';
+                    imagenEventoAdicional.src = 'https://lh3.googleusercontent.com/p/AF1QipNjOS0CB_zSJZTSMDJwxeeWlGZ_NmYJBErNN21Q=s680-w680-h510';
                     titulo.textContent = 'Evento 1: Presentación de Libro';
                     descripcion.textContent = 'Detalles del Evento: Biblioteca ‘José García Rodríguez’, 29 de Noviembre.';
-                    imagenUbicacion.src = 'https://raw.githubusercontent.com/Sams926/app/refs/heads/main/Captura%20de%20pantalla%202024-12-01%20231235.png';
+                    ubicacionEvento = { lat: 25.438, lng: -100.973 };
                 } else if (evento === 2) {
                     imagenEvento.src = 'https://saltillo.city/wp-content/uploads/2024/11/Taller-de-Expresion-Corporal-scaled.jpg';
+                    imagenEventoAdicional.src = 'https://mexicotravelchannel.com.mx/wp-content/uploads/2020/10/casa-purcel_mexico-travel-channel_1200x680.jpg';
                     titulo.textContent = 'Evento 2: Taller de Expresión';
-                    descripcion.textContent = 'Detalles del Evento: Centro Cultural Casa Purcell.';
-                    imagenUbicacion.src = 'https://raw.githubusercontent.com/Sams926/app/refs/heads/main/Captura%20de%20pantalla%202024-12-01%20231314.png';
+                    descripcion.textContent = 'Detalles del Evento: Sábado 9, 16 y 30 de Noviembre, Centro Cultural Casa Purcell.';
+                    ubicacionEvento = { lat: 25.450, lng: -100.960 };
                 } else if (evento === 3) {
                     imagenEvento.src = 'https://saltillo.city/wp-content/uploads/2024/11/Stephen-Costello-Kristine-Opolais-en-Concierto--scaled.jpg';
+                    imagenEventoAdicional.src = 'https://upload.wikimedia.org/wikipedia/commons/1/1a/Teatro_de_la_Ciudad_Fernando_Soler.jpg';
                     titulo.textContent = 'Evento 3: Concierto Ópera';
                     descripcion.textContent = 'Detalles del Evento: Teatro de la Ciudad Fernando Soler.';
-                    imagenUbicacion.src = 'https://raw.githubusercontent.com/Sams926/app/refs/heads/main/Captura%20de%20pantalla%202024-12-01%20231558.png';
+                    ubicacionEvento = { lat: 25.434, lng: -100.967 };
                 }
+
+                // Centrar mapa en la ubicación
+                map.setCenter(ubicacionEvento);
+                map.setZoom(15);
             }, 1500);
         }
     </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY&callback=initMap" async defer></script>
 </body>
 </html>
