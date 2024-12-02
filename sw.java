@@ -1,14 +1,13 @@
 const CACHE_NAME = "eventos-cache-v1";
 const urlsToCache = [
-    "/",
-    "/index.html",
-    "/style.css",
+    "./",
+    "./index.html",
+    "./css/style.css",
+    "./js/script.js",
+    "./img/icon-192x192.png",
+    "./img/icon-512x512.png",
     "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css",
-    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css",
-    "https://code.jquery.com/jquery-3.5.1.slim.min.js",
-    "https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js",
-    "/icon-192x192.png",
-    "/icon-512x512.png"
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
 ];
 
 self.addEventListener("install", event => {
